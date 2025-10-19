@@ -1,11 +1,18 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { FormState } from '../types';
 
+// Добавляем интерфейс для категорий
+interface JobCategory {
+  slug: string;
+  name: string;
+  // добавьте другие поля, которые возвращает API
+}
+
 interface FormDataContextValue {
   data: FormState;
   update: (values: Partial<FormState>) => void;
   reset: () => void;
-  jobCategories: object[];
+  jobCategories: JobCategory[];
   jobCategoriesStatus: 'idle' | 'loading' | 'loaded' | 'error';
   jobCategoriesError: string | null;
   loadJobCategories: () => Promise<void>;
@@ -26,7 +33,7 @@ const FormDataContext = createContext<FormDataContextValue | undefined>(undefine
 
 export const FormDataProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [data, setData] = useState<FormState>(defaultState);
-  const [jobCategories, setJobCategories] = useState<object[]>([]);
+  const [jobCategories, setJobCategories] = useState<JobCategory[]>([]);
   const [jobCategoriesStatus, setJobCategoriesStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
   const [jobCategoriesError, setJobCategoriesError] = useState<string | null>(null);
 
@@ -50,7 +57,7 @@ export const FormDataProvider: React.FC<React.PropsWithChildren> = ({ children }
       if (!response.ok) {
         throw new Error('Не удалось получить список категорий');
       }
-      const result = (await response.json()) as object[];
+      const result = (await response.json()) as JobCategory[];
       setJobCategories(result);
       setJobCategoriesError(null);
       setJobCategoriesStatus('loaded');
