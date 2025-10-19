@@ -5,7 +5,7 @@ interface FormDataContextValue {
   data: FormState;
   update: (values: Partial<FormState>) => void;
   reset: () => void;
-  jobCategories: string[];
+  jobCategories: object[];
   jobCategoriesStatus: 'idle' | 'loading' | 'loaded' | 'error';
   jobCategoriesError: string | null;
   loadJobCategories: () => Promise<void>;
@@ -26,7 +26,7 @@ const FormDataContext = createContext<FormDataContextValue | undefined>(undefine
 
 export const FormDataProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [data, setData] = useState<FormState>(defaultState);
-  const [jobCategories, setJobCategories] = useState<string[]>([]);
+  const [jobCategories, setJobCategories] = useState<object[]>([]);
   const [jobCategoriesStatus, setJobCategoriesStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
   const [jobCategoriesError, setJobCategoriesError] = useState<string | null>(null);
 
@@ -50,7 +50,7 @@ export const FormDataProvider: React.FC<React.PropsWithChildren> = ({ children }
       if (!response.ok) {
         throw new Error('Не удалось получить список категорий');
       }
-      const result = (await response.json()) as string[];
+      const result = (await response.json()) as object[];
       setJobCategories(result);
       setJobCategoriesError(null);
       setJobCategoriesStatus('loaded');

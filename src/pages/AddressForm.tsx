@@ -51,8 +51,8 @@ const AddressForm: React.FC = () => {
         >
           <option value="">{jobCategoriesStatus === 'loading' ? 'Загрузка...' : 'Выберите значение'}</option>
           {jobCategories.map((category) => (
-            <option key={category} value={category}>
-              {category}
+            <option key={category.slug} value={category.name}>
+              {category.name}
             </option>
           ))}
         </select>
